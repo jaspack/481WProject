@@ -16,8 +16,13 @@ def train_agent():
     # First, load the training configuration
     config = load_training_configuration()
 
+    # Creates and returns a monitored F1TenthEnvironment instance for training or evaluation.
+    def make_env():
+        env = F1TenthEnvironment(config)
+        return Monitor(env)
+
     # Wrap the environment in a DummyVecEnv
-    vec_env = DummyVecEnv([make_env(config)])
+    vec_env = DummyVecEnv([make_env])
 
 
     # Extract total timesteps from config if available, default to 100k
@@ -59,8 +64,3 @@ def train_agent():
     model.save(model_path)
     # Print a message to indicate the training is complete and the model has been saved
     print(f"Training complete. Model successfully saved to {model_path}.zip")
-
-# Creates and returns a monitored F1TenthEnvironment instance for training or evaluation.
-def make_env(config):
-    env = F1TenthEnvironment(config)
-    return Monitor(env)
