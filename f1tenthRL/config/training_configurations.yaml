@@ -1,0 +1,14 @@
+# config/training_configurations.yaml
+
+environment:
+  map_name: "Spielberg"
+  max_episode_steps: 2000
+  lidar_downsample_factor: 8
+  total_timesteps: 100000
+  maps_base_directory: "/home/jason/f1tenthRL/maps"
+
+reward_weights:
+  progress_weight: 0.1
+  velocity_weight: 0.5
+  smoothness_penalty: 0.1
+  collision_penalty: -100.0
