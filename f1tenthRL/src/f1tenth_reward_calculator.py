@@ -73,6 +73,8 @@ class F1TenthRewardCalculator:
         current_s = self.raceline[self.nearest_index, 0]
         # calculate the 
         delta_s = current_s - self.previous_s
+        if delta_s < 0:
+            debug = True
         # Store the current distance along the raceline for the next step's calculation
         self.previous_s = current_s
         # Return the change in distance along the raceline as a float
@@ -97,7 +99,7 @@ class F1TenthRewardCalculator:
         raceline_path = f"{self.maps_base_directory}/{map_name}/{map_name}_raceline.csv"
 
         # Load the raceline data from the CSV file
-        raceline_data = np.loadtxt(raceline_path, delimiter=';', skiprows=1)
+        raceline_data = np.loadtxt(raceline_path, delimiter=',', skiprows=1)
 
         # Return the loaded raceline data
         return raceline_data

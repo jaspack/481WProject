@@ -1,7 +1,7 @@
-from code.f1tenth_environment import F1TenthEnvironment
-from code.utils import parse_arguments
-from code.train import train_agent
-from code.evaluate import evaluate_agent
+from src.f1tenth_environment import F1TenthEnvironment
+from src.utils import parse_arguments
+from src.train import train_agent
+from src.evaluate import evaluate_agent
 
 def main():
     args = parse_arguments()

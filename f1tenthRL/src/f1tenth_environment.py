@@ -7,6 +7,7 @@ from .f1tenth_reward_calculator import F1TenthRewardCalculator
 class F1TenthEnvironment(new_gym.Env):
     def __init__(self, configurations, lidar_downsample_factor=8):
         super().__init__()
+        self.configurations = configurations
         # First, initialize the legacy gym environment with the specified map
         map_name = configurations.get("environment").get("map_name")
         map_path = f"maps/{map_name}/{map_name}_map"
@@ -59,6 +60,8 @@ class F1TenthEnvironment(new_gym.Env):
         # reset the current step counter
         self.current_step = 0
         # return the processed observation and an empty info dictionary
+        # Re-instantiate the reward calculator to reset its internal state for the new episode
+        self.reward_calculator = F1TenthRewardCalculator(self.configurations)
         return obs, {}
     # Steps the environment given an action, returns the new observation
     def step(self, action):
@@ -82,6 +85,8 @@ class F1TenthEnvironment(new_gym.Env):
         # Check if the maximum number of steps has been reached, if it has, truncated is true, otherwise false.
         truncated = self.current_step >= self.max_steps
         # Return the processed observation, computed reward, terminated flag, truncated flag, and an empty info dictionary
+        if terminated:
+            debug = True
         return obs, reward, terminated, truncated, info
 
     # Renders the f1tenth simulator environment
