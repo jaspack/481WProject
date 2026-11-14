@@ -1,5 +1,6 @@
 import os
 from stable_baselines3 import PPO
+from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import SubprocVecEnv
@@ -17,12 +18,18 @@ def train_agent():
     config = load_training_configuration()
 
     # Creates and returns a monitored F1TenthEnvironment instance for training or evaluation.
-    def make_env():
-        env = F1TenthEnvironment(config)
-        return Monitor(env)
+    #def make_env():
+    #    env = F1TenthEnvironment(config)
+    #    return Monitor(env)
 
     # Wrap the environment in a DummyVecEnv
-    vec_env = DummyVecEnv([make_env])
+    #vec_env = DummyVecEnv([make_env])
+    vec_env = make_vec_env(
+        lambda: F1TenthEnvironment(config),
+        n_envs=4,
+        seed=42,
+        vec_env_cls=SubprocVecEnv,
+    )
 
 
     # Extract total timesteps from config if available, default to 100k
@@ -41,6 +48,7 @@ def train_agent():
         # Otherwise, create a new PPO model
         print("No existing model found. Initializing a new PPO model...")
         model = PPO(
+            device="cpu",
             policy="MlpPolicy",
             env=vec_env,
             verbose=1,
